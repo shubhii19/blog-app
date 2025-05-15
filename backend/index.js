@@ -5,6 +5,7 @@ import fileUpload from "express-fileupload";
 import { v2 as cloudinary } from 'cloudinary';
 import userRoutes from "./routes/userRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 const app = express();
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 8080;
 const MONGOURI = process.env.MONGO_URI;
 
 app.use(express.json());
+app.use(cookieParser());
 // console.log(MONGOURI)
 
 app.use(
