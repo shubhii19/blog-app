@@ -22,4 +22,5 @@ router.get("/single-blog/:id", isAuthenticated, getSingleBlogController);
 router.get("/my-blog", isAuthenticated, isAdmin("admin"), getMyBlogsController);
 router.put("/update/:id",isAuthenticated,isAdmin("admin"),updateBlogControlller);
 
+
 export default router;

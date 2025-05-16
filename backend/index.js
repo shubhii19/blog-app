@@ -6,6 +6,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import userRoutes from "./routes/userRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import cookieParser from "cookie-parser";
+import cors from 'cors'
 
 dotenv.config();
 const app = express();
@@ -14,6 +15,11 @@ const MONGOURI = process.env.MONGO_URI;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({
+  origin:process.env.FRONTEND_URL,
+  credentials:true,
+  methods:["GET","POST","PUT","DELETE"]
+}));
 // console.log(MONGOURI)
 
 app.use(
