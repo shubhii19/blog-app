@@ -39,12 +39,13 @@ export const createBlogController = async (req, res) => {
       category,
       adminName,
       adminPhoto,
-      createdBy : req.user.name,
+      createdBy : req.user._id,
       blogImage: {
         public_id: cloudinaryResponse.public_id,
         url: cloudinaryResponse.url,
       },
     };
+    console.log("yeh rha blog: ",blogData);
     const blog = await Blog.create(blogData);
 
     res.status(201).json({
@@ -84,57 +85,7 @@ export const getSingleBlogController = async (req, res) => {
   res.status(200).json(blog);
 };
 
-// export const getMyBlogsController = async (req, res) => {
-//   const createdBy = req.user._id;
-//   console.log(createdBy)
-//   const myBlogs = await Blog.find({ createdBy });
-//   res.status(200).json(myBlogs);
-// };
 
-
-// export const getMyBlogsController = async (req, res) => {
-//   try {
-//     const createdBy = new mongoose.Types.ObjectId(req.user._id);
-//     console.log("User ID:", createdBy);
-
-//     const myBlogs = await Blog.find({ createdBy });
-//     console.log("Blogs found:", myBlogs);
-
-//     res.status(200).json(myBlogs);
-
-//     const allBlogs = await Blog.find();
-//     console.log("All blogs:", allBlogs);
-//   } catch (error) {
-//     console.error("Error in getMyBlogsController:", error);
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// };
-
-// export const getMyBlogsController = async (req, res) => {
-//   try {
-//     const allBlogs = await Blog.find();
-
-//     // Filter manually by comparing string values
-//     const myBlogs =  allBlogs.filter(blog => blog.createdBy.toString() === req.user._id.toString());
-
-//     console.log("My Blogs:", myBlogs);
-//     res.status(200).json(myBlogs);
-//   } catch (error) {
-//     console.error("Error:", error);
-//     res.status(500).json({ error: "Something went wrong" });
-//   }
-// };
-
-// import mongoose from 'mongoose';
-
-// export const getMyBlogsController = async (req, res) => {
-//   const createdBy = new mongoose.Types.ObjectId(req.user._id); // ✅ force ObjectId type
-//   console.log("Created By:", createdBy);
-
-//   const myBlogs = await Blog.find({ createdBy }); // ⬅️ now this will work
-
-//   res.status(200).json(myBlogs);
-// };
 
 export const getMyBlogsController = async (req, res) => {
   try {
@@ -149,3 +100,16 @@ export const getMyBlogsController = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+export const updateBlogControlller = async (req,res)=>{
+  const {id} = req.params;
+  if(!mongoose.Types.ObjectId.isValid(id)){
+    return res.status(400).json({message:"Invalid blog id."});
+  }
+  const updatedBlog = await Blog.findByIdAndUpdate(id,req.body,{new:true});
+  if(!updatedBlog){
+    return res.status(404).json({message:"Blog not found."})
+  }
+  res.status(404).json(updatedBlog);
+}
